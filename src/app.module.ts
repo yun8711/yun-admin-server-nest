@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HttpExceptionFilter } from './common/http-exception.filter';
 import { ResponseInterceptor } from './common/response.interceptor';
+import { RedisModule } from './redis/redis.module';
 import { TestModule } from './test/test.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { TestModule } from './test/test.module';
       isGlobal: true,
       envFilePath: 'src/.env',
     }),
+    RedisModule,
     TestModule,
   ],
   controllers: [AppController],

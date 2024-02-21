@@ -1,6 +1,7 @@
 import { Module, ValidationPipe } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HttpExceptionFilter } from './common/http-exception.filter';
@@ -13,6 +14,29 @@ import { TestModule } from './test/test.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: 'src/.env',
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory(configService: ConfigService) {
+        return {
+          type: 'mysql',
+          host: configService.get('MYSQL_HOST'),
+          port: configService.get('MYSQL_PORT'),
+          username: configService.get('MYSQL_USERNAME'),
+          password: configService.get('MYSQL_PASSWORD'),
+          database: configService.get('MYSQL_DATABASE'),
+          // 是否自动创建数据库表结构
+          synchronize: true,
+          // 打印日志级别
+          logging: ['error', 'warn'],
+          // 线程池大小
+          poolSize: 10,
+          // 数据库连接驱动程序
+          connectorPackage: 'mysql2',
+          // 自动加载实体类
+          autoLoadEntities: true,
+        };
+      },
     }),
     RedisModule,
     TestModule,

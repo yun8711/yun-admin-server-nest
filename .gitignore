@@ -27,3 +27,6 @@ stats.html
 
 # vitepress 配置
 docs/.vitepress/cache
+
+# nest项目文档
+documentation

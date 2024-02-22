@@ -1,9 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Inject } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RedisService } from '../redis/redis.service';
 import { TestService } from './test.service';
 import { CreateTestDto } from './dto/create-test.dto';
 import { UpdateTestDto } from './dto/update-test.dto';
 
+@ApiTags('测试接口')
 @Controller('test')
 export class TestController {
   @Inject()
@@ -12,6 +14,7 @@ export class TestController {
   constructor(private readonly testService: TestService) {}
 
   @Post()
+  @ApiOperation({ summary: '测试post接口创建数据', description: '接口描述' })
   create(@Body() createTestDto: CreateTestDto) {
     return this.testService.create(createTestDto);
   }
